@@ -9,10 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.16",
+    "@mantine/hooks": "^6.0.16",
+    "@nextui-org/react": "^1.0.0-beta.13",
+    "@tabler/icons-react": "^2.24.0",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "autoprefixer": "10.4.14",
+    "datamaps": "^0.5.9",
     "next": "13.4.9",
     "postcss": "8.4.25",
     "react": "18.2.0",
