@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,600;0,800;1,400&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,9 +18,35 @@
 }
 
 body {
+  font-family: "Poppins", sans-serif;
   color: rgb(var(--foreground-rgb));
   background-image: url("https://images.unsplash.com/photo-1614727187346-ec3a009092b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1478&q=80");
-background-size: cover;
-background-repeat: no-repeat;
-background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.37);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.9px);
+  -webkit-backdrop-filter: blur(5.9px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.thumb_scroll::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 10px;
+  max-height: 90%;
+  z-index: -10;
+}
+
+.thumb_scroll::-webkit-scrollbar-track {
+  background-color: rgba(108, 106, 106, 0.714);
+}
+
+.thumb_scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.714);
+  border-radius: 10px;
 }
