@@ -34,7 +34,28 @@ const memberSlice = createSlice({
         freeTime: [{ id: generateId(), start: "", end: "" }],
       });
     },
-    changeTimeZone: (state, action: PayloadAction<Member>) => {},
+    deleteMember: (state, action: PayloadAction<{ id: string }>) => {
+      const memberIndex = state.findIndex((m) => m.id === action.payload.id);
+      state.splice(memberIndex, 1);
+    },
+    changeTimeZone: (
+      state,
+      action: PayloadAction<{ id: string; timeZone: string }>
+    ) => {
+      const member = state.find((m) => m.id === action.payload.id);
+      if (member) {
+        member.timezone = action.payload.timeZone;
+      }
+    },
+    changePersonName: (
+      state,
+      action: PayloadAction<{ id: string; name: string }>
+    ) => {
+      const member = state.find((m) => m.id === action.payload.id);
+      if (member) {
+        member.name = action.payload.name;
+      }
+    },
     addNewFreetime: (state, action: PayloadAction<{ id: string }>) => {
       const member = state.find((m) => m.id === action.payload.id);
       const newId = generateId();
@@ -49,6 +70,15 @@ const memberSlice = createSlice({
       const member = state.find((m) => m.id === action.payload.memberId);
       if (member) {
         member.freeTime.splice(action.payload.indexTobeDeleted, 1);
+      }
+    },
+    updateTimeZone: (
+      state,
+      action: PayloadAction<{ id: string; timeZone: string }>
+    ) => {
+      const m = state.find((m) => m.id === action.payload.id);
+      if (m) {
+        m.timezone = action.payload.timeZone;
       }
     },
     updateMemberFreeTimeStart: (
@@ -85,11 +115,21 @@ const memberSlice = createSlice({
 export const {
   addMember,
   removeFreetime,
+  changeTimeZone,
   addNewFreetime,
+  changePersonName,
+  deleteMember,
   updateMemberFreeTimeStart,
   updateMemberFreeTimeEnd,
 } = memberSlice.actions;
 export const currentMembers = (state: RootState) => state.members;
+export const currentMemberName = (state: RootState, memberId: string) => {
+  const m = state.members.find((mem) => mem.id === memberId);
+  if (m) {
+    return m.name;
+  }
+};
+
 export const currentMemberFreeTime = (
   state: RootState,
   memberId: string
