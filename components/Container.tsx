@@ -225,7 +225,7 @@ function Container(props: { memberData: Member }) {
                           handleChangeTime(newValue, index, true)
                         }
                         value={f.start}
-                        label="End"
+                        label="start"
                         viewRenderers={{
                           hours: renderTimeViewClock,
                           minutes: renderTimeViewClock,
