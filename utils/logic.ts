@@ -39,3 +39,34 @@ function convertToUTC(participants: Member[]): Member[] {
  
   return convertedResults;
 }
+
+function findCommonTime(members) {
+  if (members.length === 0) {
+    return null; // No common time if there are no members
+  }
+
+  // Convert time strings to Moment objects
+  const allFreeTimes = members.map(member => {
+    return member.freeTime.map(timeSlot => {
+      return {
+        start: moment(timeSlot.start, "HH:mm:ss"),
+        end: moment(timeSlot.end, "HH:mm:ss"),
+      };
+    });
+  });
+
+  // Find the maximum start time and minimum end time among all members
+  const maxStartTime = moment.max(allFreeTimes.flat().map(timeSlot => timeSlot.start));
+  const minEndTime = moment.min(allFreeTimes.flat().map(timeSlot => timeSlot.end));
+
+  // Check if there is any overlap
+  if (maxStartTime.isBefore(minEndTime)) {
+    return { start: maxStartTime.format("HH:mm:ss"), end: minEndTime.format("HH:mm:ss") };
+  } else {
+    return null; // No common time found
+  }
+}
+
+
+const commonTime = findCommonTime(initialState);
+console.log(commonTime);
