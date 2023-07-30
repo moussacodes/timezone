@@ -2,7 +2,7 @@
 import "./style.css";
 import { Accordion, Select, ThemeIcon } from "@mantine/core";
 import React, { useState } from "react";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { format, parseISO } from "date-fns";
@@ -203,6 +203,8 @@ function Container(props: { memberData: Member }) {
                 label="Select your timezone"
               />
               <div className="free_time flex flex-col gap-y-4">
+              <h1 className="text-black">Free time</h1>
+
                 {freeTime.map((f, index) => (
                   <div
                     key={f.id}
@@ -219,33 +221,25 @@ function Container(props: { memberData: Member }) {
                       <IconTrash size="1.05rem" stroke={1.5} />
                     </ThemeIcon>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <TimePicker
+                      <DesktopTimePicker
                         className="w-36"
                         onChange={(newValue: any) =>
                           handleChangeTime(newValue, index, true)
                         }
                         value={f.start}
                         label="start"
-                        viewRenderers={{
-                          hours: renderTimeViewClock,
-                          minutes: renderTimeViewClock,
-                          seconds: renderTimeViewClock,
-                        }}
+                         
                       />
                     </LocalizationProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <TimePicker
+                      <DesktopTimePicker
                         className="w-36"
                         onChange={(newValue: any) =>
                           handleChangeTime(newValue, index, false)
                         }
                         value={f.end}
                         label="End"
-                        viewRenderers={{
-                          hours: renderTimeViewClock,
-                          minutes: renderTimeViewClock,
-                          seconds: renderTimeViewClock,
-                        }}
+                        
                       />
                     </LocalizationProvider>
                     {index === freeTime.length - 1 ? (
