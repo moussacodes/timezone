@@ -2,13 +2,14 @@
 import "./style.css";
 import { Accordion, Select, ThemeIcon } from "@mantine/core";
 import React, { useState } from "react";
-import { DesktopTimePicker } from '@mui/x-date-pickers/DesktopTimePicker';
+import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
 import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { format, parseISO } from "date-fns";
 
 import ContentEditable from "react-contenteditable";
 import { timeZones } from "@/data/timezones";
+import moment from "moment";
 
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 
@@ -72,8 +73,8 @@ function Container(props: { memberData: Member }) {
 
   const addNewTimeRow = () => {
     if (
-      freeTime[freeTime.length - 1].start.length !== 0 &&
-      freeTime[freeTime.length - 1].end.length !== 0
+      freeTime[freeTime.length - 1].start.isValid() &&
+      freeTime[freeTime.length - 1].end.isValid()
     ) {
       dispatch(addNewFreetime({ id: props.memberData.id }));
     }
@@ -101,19 +102,20 @@ function Container(props: { memberData: Member }) {
     }
   }
 
+  const getTimeValue = (time: moment.Moment) => {
+    return "".concat(time.hours().toString(), ":", time.hours().toString());
+  };
+
   const handleChangeTime = (
     newValue: any,
     index: number,
     isStartTime: boolean
   ) => {
-    let date = new Date(newValue);
-    const dateObj = new Date(date);
-    const timeString = dateObj.toTimeString().slice(0, 8);
-    console.log(timeString); // Output: 03:32:00
-    //   let h = date.getHours()
-    //   let m = date.getMinutes()
-    //   let s = date.getSeconds()
-    //  console.log(h+":"+m+":"+s)
+    let today = moment().format("D/MM/YYYY").concat(" ", newValue);
+
+    const time = moment(today, "DD MM YYYY hh:mm:ss");
+ 
+    console.log(time);
 
     setFreeTime((prevFreeTime) => {
       const updatedFreeTime = [...prevFreeTime];
@@ -121,7 +123,7 @@ function Container(props: { memberData: Member }) {
         dispatch(
           updateMemberFreeTimeStart({
             memberId: props.memberData.id,
-            startTime: timeString,
+            startTime: time,
             index: index,
           })
         );
@@ -129,7 +131,7 @@ function Container(props: { memberData: Member }) {
         dispatch(
           updateMemberFreeTimeEnd({
             memberId: props.memberData.id,
-            endTime: timeString,
+            endTime: time,
             index: index,
           })
         );
@@ -203,7 +205,7 @@ function Container(props: { memberData: Member }) {
                 label="Select your timezone"
               />
               <div className="free_time flex flex-col gap-y-4">
-              <h1 className="text-black">Free time</h1>
+                <h1 className="text-black">Free time</h1>
 
                 {freeTime.map((f, index) => (
                   <div
@@ -226,9 +228,8 @@ function Container(props: { memberData: Member }) {
                         onChange={(newValue: any) =>
                           handleChangeTime(newValue, index, true)
                         }
-                        value={f.start}
+                        value={getTimeValue(f.start)}
                         label="start"
-                         
                       />
                     </LocalizationProvider>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -237,9 +238,8 @@ function Container(props: { memberData: Member }) {
                         onChange={(newValue: any) =>
                           handleChangeTime(newValue, index, false)
                         }
-                        value={f.end}
+                        value={getTimeValue(f.end)}
                         label="End"
-                        
                       />
                     </LocalizationProvider>
                     {index === freeTime.length - 1 ? (

@@ -1,7 +1,9 @@
+import moment from "moment";
+
 export interface FreeTime {
   id: string;
-  start: string;
-  end: string;
+  start: moment.Moment;
+  end: moment.Moment;
 }
 
 // Define the type for member

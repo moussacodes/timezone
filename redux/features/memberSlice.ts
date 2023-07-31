@@ -1,6 +1,7 @@
 // memberSlice.ts
 import { FreeTime, Member, RootState } from "@/data";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 
 // Define the type for free time object
@@ -11,7 +12,7 @@ const initialState: Member[] = [
     id: "qsfg57qregf5sg465sdfg",
     name: "Person 1",
     timezone: "Africa/Addis_Ababa",
-    freeTime: [{ id: "qsdfqs2qs5df", start: "", end: "" }],
+    freeTime: [{ id: "qsdfqs2qs5df", start: moment(), end: moment() }],
   },
 ];
 
@@ -31,7 +32,7 @@ const memberSlice = createSlice({
         id: newId,
         name: newName,
         timezone: "Africa/Addis_Ababa",
-        freeTime: [{ id: generateId(), start: "", end: "" }],
+        freeTime: [{ id: generateId(), start: moment(), end: moment() }],
       });
     },
     deleteMember: (state, action: PayloadAction<{ id: string }>) => {
@@ -60,7 +61,7 @@ const memberSlice = createSlice({
       const member = state.find((m) => m.id === action.payload.id);
       const newId = generateId();
       if (member) {
-        member.freeTime.push({ id: newId, start: "", end: "" });
+        member.freeTime.push({ id: newId, start: moment(), end: moment() });
       }
     },
     removeFreetime: (
@@ -85,21 +86,21 @@ const memberSlice = createSlice({
       state,
       action: PayloadAction<{
         memberId: string;
-        startTime: string;
+        startTime: moment.Moment;
         index: number;
       }>
     ) => {
       const { memberId, startTime, index } = action.payload;
       const member = state.find((m) => m.id === memberId);
       if (member) {
-        member.freeTime[index].start = startTime;
+        member.freeTime[index].end = startTime;
       }
     },
     updateMemberFreeTimeEnd: (
       state,
       action: PayloadAction<{
         memberId: string;
-        endTime: string;
+        endTime: moment.Moment;
         index: number;
       }>
     ) => {
