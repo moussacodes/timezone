@@ -73,9 +73,10 @@ function Container(props: { memberData: Member }) {
 
   const addNewTimeRow = () => {
     if (
-      freeTime[freeTime.length - 1].start.isValid() &&
-      freeTime[freeTime.length - 1].end.isValid()
+      getTimeValue(freeTime[freeTime.length - 1].start).length !== 0 &&
+      getTimeValue(freeTime[freeTime.length - 1].end).length !== 0
     ) {
+      console.log(freeTime[freeTime.length - 1].start);
       dispatch(addNewFreetime({ id: props.memberData.id }));
     }
   };
@@ -103,50 +104,43 @@ function Container(props: { memberData: Member }) {
   }
 
   const getTimeValue = (time: moment.Moment) => {
-    return "".concat(time.hours().toString(), ":", time.hours().toString());
+     return "".concat(time.hour().toString(), ":", time.minute().toString());
   };
 
   const handleChangeTime = (
-    newValue: any,
+    newValue: moment.Moment,
     index: number,
     isStartTime: boolean
   ) => {
-    let today = moment().format("D/MM/YYYY").concat(" ", newValue);
+    // let today = moment().format("D/MM/YYYY").concat(" ", newValue);
 
-    const time = moment(today, "DD MM YYYY hh:mm:ss");
- 
-    console.log(time);
+     // const time = moment(newValue, "hh:mm:ss");
 
-    setFreeTime((prevFreeTime) => {
-      const updatedFreeTime = [...prevFreeTime];
-      if (isStartTime) {
-        dispatch(
-          updateMemberFreeTimeStart({
-            memberId: props.memberData.id,
-            startTime: time,
-            index: index,
-          })
-        );
-      } else {
-        dispatch(
-          updateMemberFreeTimeEnd({
-            memberId: props.memberData.id,
-            endTime: time,
-            index: index,
-          })
-        );
-      }
-      return updatedFreeTime;
-    });
+     console.log("container time", newValue.format("hh:mm:ss"))
+    if (isStartTime) {
+      dispatch(
+        updateMemberFreeTimeStart({
+          memberId: props.memberData.id,
+          startTime: newValue,
+          index: index,
+        })
+      );
+    } else {
+      dispatch(
+        updateMemberFreeTimeEnd({
+          memberId: props.memberData.id,
+          endTime: newValue,
+          index: index,
+        })
+      );
+    }
   };
 
   const deleteMemberF = (e: any) => {
     // e.stopPropagation();
     dispatch(deleteMember({ id: props.memberData.id }));
   };
-  const handleBlur = () => {
-    console.log(text.current);
-  };
+ 
 
   //TIMEZONE
 
@@ -185,8 +179,7 @@ function Container(props: { memberData: Member }) {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                onBlur={handleBlur}
-                onChange={handleChange}
+                 onChange={handleChange}
               />
             </div>
           </Accordion.Control>

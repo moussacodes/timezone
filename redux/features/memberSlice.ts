@@ -1,8 +1,8 @@
 // memberSlice.ts
 import { FreeTime, Member, RootState } from "@/data";
+import { generateId } from "@/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
-import { v4 as uuidv4 } from "uuid";
 
 // Define the type for free time object
 
@@ -16,10 +16,7 @@ const initialState: Member[] = [
   },
 ];
 
-function generateId(): string {
-  const id: string = uuidv4();
-  return id;
-}
+
 
 const memberSlice = createSlice({
   name: "members",
@@ -93,7 +90,7 @@ const memberSlice = createSlice({
       const { memberId, startTime, index } = action.payload;
       const member = state.find((m) => m.id === memberId);
       if (member) {
-        member.freeTime[index].end = startTime;
+        member.freeTime[index].start = startTime;
       }
     },
     updateMemberFreeTimeEnd: (
