@@ -13,11 +13,14 @@ import ResultContainer from "@/components/ResultContainer";
 import { MenuItem } from "@mui/material";
 import { chaangeDuration, getDuration } from "@/redux/features/durationSlice";
 import { Result, findCommonIntervalAmongMembers } from "@/utils/logic";
+import DisplayContainer from "@/components/DisplayContainer";
 
 export default function Home() {
   const currentDuration = useSelector(getDuration);
   const [duration, setDuration] = useState(currentDuration.duration); // 2h, 1h, 45m, 30m, 15m
   const [freeTimeSlots, setFreeTimeSlots] = useState<Result[]>([]);
+
+  const [empty, setEmpty] = useState(false);
 
   useEffect(() => {
     if (currentDuration) {
@@ -41,6 +44,9 @@ export default function Home() {
     });
     if (r) {
       console.log("Setting freeTimeSlots", r); // Check the value of r again
+      if (r.length === 0) {
+        setEmpty(true);
+      }
       setFreeTimeSlots([...r]);
     }
   };
@@ -94,13 +100,22 @@ export default function Home() {
           className="h-5/6 w-1/3 border glass rounded-md glass flex flex-col gap-y-4 overflow-auto relative thumb_scroll"
         >
           <h1 className="text-xl text-black text-center p-4">meeting time</h1>
-          {freeTimeSlots.map((f) => (
-            <div key={f.fTime.id}>
-              <p>{f.timezone}</p>
-              <p>{f.fTime.start.format("hh:mm:ss")}</p>
-              <p>{f.fTime.end.format("hh:mm:ss")}</p>
+          {empty ? (
+            <div>
+              <p>couldn't find a time for a meeting</p>
             </div>
-          ))}
+          ) : (
+            <>
+              {freeTimeSlots.map((f) => (
+                <DisplayContainer
+                  key={f.fTime.id}
+                  timezone={f.timezone}
+                  start={f.fTime.start}
+                  end={f.fTime.end}
+                />
+              ))}
+            </>
+          )}
         </motion.div>
       ) : (
         <></>

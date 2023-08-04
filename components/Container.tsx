@@ -116,8 +116,7 @@ function Container(props: { memberData: Member }) {
 
      // const time = moment(newValue, "hh:mm:ss");
 
-     console.log("container time", newValue.format("hh:mm:ss"))
-    if (isStartTime) {
+     if (isStartTime) {
       dispatch(
         updateMemberFreeTimeStart({
           memberId: props.memberData.id,

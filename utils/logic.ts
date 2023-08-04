@@ -9,8 +9,8 @@ export interface FreeTime {
 }
 
 export interface Result {
-  timezone: string,
-  fTime: FreeTime
+  timezone: string;
+  fTime: FreeTime;
 }
 
 // Define the type for member
@@ -154,14 +154,8 @@ export const findCommonIntervalAmongMembers = (
       }
     }
   }
-  let tempArr: Result[] = [];
-  let g = revertToOriginalTimezone(availableFreeTime, members);
-  for (const t of g) {
-    if (!checkDuplicateId(tempArr, t.fTime.id)) {
-      tempArr.push(t);
-    }
-  }
-  return tempArr;
+
+  return revertToOriginalTimezone(availableFreeTime, members);
 };
 
 const compareWithMember = (
@@ -202,18 +196,25 @@ const compareWithMember = (
 const revertToOriginalTimezone = (freetime: FreeTime[], members: Member[]) => {
   let revertedFreeTime: Result[] = [];
 
-  members.forEach((member) => {
-    freetime.forEach((f) => {
-      const start = f.start.subtract(
-        moment().tz(member.timezone).utcOffset(),
-        "minutes"
-      );
-      const end = f.end.subtract(
-        moment().tz(member.timezone).utcOffset(),
-        "minutes"
-      );
+  let tempH: FreeTime[] = [];
+  for (const a of freetime) {
+    if (!checkDuplicateId(tempH, a.id)) {
+      tempH.push(a);
+    }
+  }
+
+  const tzs: string[] = [];
+  members.forEach((k) => {
+    console.log(k.timezone);
+    tzs.push(k.timezone);
+  });
+
+  tzs.forEach((t) => {
+    tempH.forEach((f) => {
+      const start = f.start.subtract(moment.tz(t).utcOffset(), "minutes");
+      const end = f.end.subtract(moment.tz(t).utcOffset(), "minutes");
       revertedFreeTime.push({
-        timezone: member.timezone,
+        timezone: t,
         fTime: {
           id: f.id,
           start: start, // Convert back to ISO string if needed
@@ -226,12 +227,12 @@ const revertToOriginalTimezone = (freetime: FreeTime[], members: Member[]) => {
   return revertedFreeTime;
 };
 
-const checkDuplicateId = (freeTime: Result[], id: string) => {
+const checkDuplicateId = (freeTime: FreeTime[], id: string) => {
   if (freeTime.length === 0) {
     return false;
   }
   for (const a of freeTime) {
-    if (a.fTime.id === id) {
+    if (a.id === id) {
       return true;
     }
   }
