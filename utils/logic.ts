@@ -197,6 +197,8 @@ const compareWithMember = (
   return newCommonIntervals;
 };
 
+//TODO: fix this part, should display all members
+
 const revertToOriginalTimezone = (freetime: FreeTime[], members: Member[]) => {
   let revertedFreeTime: Result[] = [];
 
