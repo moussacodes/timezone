@@ -22,8 +22,6 @@ export interface Member {
   freeTime: FreeTime[];
 }
 
- 
-
 // const members: Member[] = [
 //   {
 //     id: generateId(),
@@ -89,8 +87,9 @@ const findIntersection = (
     };
   }
   if (
-    member1.start.isAfter(member2.start) &&
-    member1.end.isBefore(member2.end)
+    (member1.start.isAfter(member2.start) &&
+      member1.end.isBefore(member2.end)) ||
+    (member1.start.isSame(member2.start) && member1.end.isBefore(member2.end)) || (member1.start.isAfter(member2.start) && member1.end.isSame(member2.end))
   ) {
     return {
       id: generateId(),
@@ -99,8 +98,8 @@ const findIntersection = (
     };
   }
   if (
-    member2.start.isAfter(member1.start) &&
-    member2.end.isBefore(member1.end)
+    (member2.start.isAfter(member1.start) &&
+      member2.end.isBefore(member1.end))
   ) {
     return {
       id: generateId(),
@@ -108,6 +107,7 @@ const findIntersection = (
       end: member2.end,
     };
   }
+
   if (
     member2.start.isBefore(member1.start) &&
     member2.end.isBetween(member1.start, member1.end)
@@ -138,8 +138,7 @@ export const findCommonIntervalAmongMembers = (
   }
   // members.forEach(A=>{
   //   A.freeTime.forEach(d=>{
-  //         console.log(d.id, d.start)
-  //   })
+   //   })
   // })
   let availableFreeTime: FreeTime[] = [];
   for (let index = 0; index < members.length; index++) {
@@ -203,8 +202,7 @@ const revertToOriginalTimezone = (freetime: FreeTime[], members: Member[]) => {
 
   const tzs: string[] = [];
   members.forEach((k) => {
-    console.log(k.timezone);
-    tzs.push(k.timezone);
+     tzs.push(k.timezone);
   });
 
   tzs.forEach((t) => {
@@ -254,9 +252,8 @@ const checkDuplicates = (
 
 // const convertedMemebers = convertToUTC(members);
 // // convertedMemebers.forEach((a) => {
-// //   console.log(a.freeTime);
-// // });
+ // // });
 // const availableFreeTimeSlots =
 //   findCommonIntervalAmongMembers(convertedMemebers);
 
-// console.log(availableFreeTimeSlots);
+ 
