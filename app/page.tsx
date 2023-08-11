@@ -6,36 +6,38 @@ import {  useDispatch, useSelector } from "react-redux";
 import { currentMembers } from "@/redux/features/memberSlice";
 import {  Member } from "@/data";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Result, findCommonIntervalAmongMembers } from "@/utils/logic";
 import DisplayContainer from "@/components/DisplayContainer";
 
 export default function Home() {
   const [freeTimeSlots, setFreeTimeSlots] = useState<Result[]>([]);
-
+ 
   const [empty, setEmpty] = useState(false);
 
  
   const [show, setShow] = useState(false);
   const members: Member[] = useSelector(currentMembers);
 
-  // const m = findCommonIntervalAmongMembers(members);
 
   const calculate_date = () => {
+    setEmpty(false);
     setShow(true);
+  };
+  
+  useEffect(() => { //BUG: when the time is changed after clicking calculate, it keeps adding new display cards
+    setFreeTimeSlots([]);
+    
     const r = findCommonIntervalAmongMembers(members);
-    r?.forEach((e) => {
-      console.log("container", e.fTime.start, e.timezone);
-    });
+  
     if (r) {
-      console.log("Setting freeTimeSlots", r); // Check the value of r again
       if (r.length === 0) {
         setEmpty(true);
       }
       setFreeTimeSlots([...r]);
     }
-  };
+  }, [members]);
 
   return (
     <motion.main

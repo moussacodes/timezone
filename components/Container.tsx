@@ -74,8 +74,7 @@ function Container(props: { memberData: Member }) {
       getTimeValue(freeTime[freeTime.length - 1].start).length !== 0 &&
       getTimeValue(freeTime[freeTime.length - 1].end).length !== 0
     ) {
-      console.log(freeTime[freeTime.length - 1].start);
-      dispatch(addNewFreetime({ id: props.memberData.id }));
+       dispatch(addNewFreetime({ id: props.memberData.id }));
     }
   };
 
@@ -134,8 +133,7 @@ function Container(props: { memberData: Member }) {
   };
 
   const deleteMemberF = (e: any) => {
-    // e.stopPropagation();
-    dispatch(deleteMember({ id: props.memberData.id }));
+     dispatch(deleteMember({ id: props.memberData.id }));
   };
 
   //TIMEZONE
