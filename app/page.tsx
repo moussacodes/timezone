@@ -2,38 +2,24 @@
 import { motion } from "framer-motion";
 import Container from "@/components/Container";
 import Empty from "@/components/Empty";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { currentMembers } from "@/redux/features/memberSlice";
-import { FreeTime, Member } from "@/data";
-import store from "../redux/store";
-// import { getMeetingTime } from "@/utils/logic";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { useEffect, useState } from "react";
-import ResultContainer from "@/components/ResultContainer";
-import { MenuItem } from "@mui/material";
-import { chaangeDuration, getDuration } from "@/redux/features/durationSlice";
+import {  Member } from "@/data";
+
+import { useState } from "react";
+
 import { Result, findCommonIntervalAmongMembers } from "@/utils/logic";
 import DisplayContainer from "@/components/DisplayContainer";
 
 export default function Home() {
-  const currentDuration = useSelector(getDuration);
-  const [duration, setDuration] = useState(currentDuration.duration); // 2h, 1h, 45m, 30m, 15m
   const [freeTimeSlots, setFreeTimeSlots] = useState<Result[]>([]);
 
   const [empty, setEmpty] = useState(false);
 
-  useEffect(() => {
-    if (currentDuration) {
-      setDuration(currentDuration.duration);
-    }
-  }, [currentDuration]);
-  const dispatch = useDispatch();
+ 
   const [show, setShow] = useState(false);
   const members: Member[] = useSelector(currentMembers);
 
-  const handleDurationChange = (event: SelectChangeEvent) => {
-    dispatch(chaangeDuration({ duration: event.target.value }));
-  };
   // const m = findCommonIntervalAmongMembers(members);
 
   const calculate_date = () => {
@@ -54,32 +40,18 @@ export default function Home() {
   return (
     <motion.main
       transition={{ ease: "easeOut", duration: 0.4 }}
-      className="flex w-full h-screen flex-row justify-center items-center  p-24"
+      className="flex w-full h-screen flex-row justify-center items-center  p-24 max-md:p-4 max-xl:flex-col"
     >
       <motion.div
         initial={{ x: "0%" }}
         animate={{ x: "0%" }}
         transition={{ ease: "easeOut", duration: 0.4 }}
-        className="h-5/6 w-1/3 border glass rounded-md glass flex flex-col gap-y-4 overflow-auto relative thumb_scroll"
+        className="h-5/6 w-1/3 border glass rounded-md glass flex flex-col gap-y-4 overflow-auto relative thumb_scroll max-2xl:w-3/4 max-md:w-full m-12 "
       >
         <h1 className="text-xl text-black text-center p-4">
           Find the perfect time for the meeting
         </h1>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          className="w-36 ml-10"
-          value={duration}
-          label="Age"
-          defaultValue={currentDuration.duration}
-          onChange={handleDurationChange}
-        >
-          <MenuItem value={"2h"}>2 hour</MenuItem>
-          <MenuItem value={"1h"}>1 hour</MenuItem>
-          <MenuItem value={"45m"}>45 minutes</MenuItem>
-          <MenuItem value={"30m"}>30 minutes</MenuItem>
-          <MenuItem value={"15m"}>15 minutes</MenuItem>
-        </Select>
+
         {members.map((m) => (
           <Container key={m.id} memberData={m} />
         ))}
@@ -97,7 +69,7 @@ export default function Home() {
           initial={{ x: "-100%", opacity: 0 }}
           animate={{ x: "0%", opacity: 1 }}
           transition={{ ease: "easeOut", duration: 0.4 }}
-          className="h-5/6 w-1/3 border glass rounded-md glass flex flex-col gap-y-4 overflow-auto relative thumb_scroll"
+          className="h-5/6 w-1/3 border glass rounded-md glass flex flex-col gap-y-4 overflow-auto relative thumb_scroll max-2xl:w-3/4 max-md:w-full"
         >
           <h1 className="text-xl text-black text-center p-4">meeting time</h1>
           {empty ? (
@@ -120,6 +92,22 @@ export default function Home() {
       ) : (
         <></>
       )}
+      <p className="absolute bottom-0 text-sm">
+        Photo by{" "}
+        <a
+          className="underline text-green-400"
+          href="https://unsplash.com/@nasa?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >
+          NASA
+        </a>{" "}
+        on{" "}
+        <a
+          className="underline text-green-400"
+          href="https://unsplash.com/photos/gYwfpVI2JzM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >
+          Unsplash
+        </a>
+      </p>
     </motion.main>
   );
 }

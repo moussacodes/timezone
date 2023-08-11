@@ -1,6 +1,7 @@
 import moment from "moment";
 import m from "moment-timezone";
 import { v4 as uuidv4 } from "uuid";
+import { generateId } from ".";
 
 export interface FreeTime {
   id: string;
@@ -21,44 +22,41 @@ export interface Member {
   freeTime: FreeTime[];
 }
 
-export const generateId = (): string => {
-  const id: string = uuidv4();
-  return id;
-};
+ 
 
-const members: Member[] = [
-  {
-    id: generateId(),
-    name: "Person 1",
-    timezone: "Africa/Addis_Ababa",
-    freeTime: [
-      {
-        id: generateId(),
-        start: moment("10:30:00", "HH:mm:ss"),
-        end: moment("12:00:00", "HH:mm:ss"),
-      },
-      {
-        id: generateId(),
-        start: moment("15:00:00", "HH:mm:ss"),
-        end: moment("17:00:00", "HH:mm:ss"),
-      },
-    ],
-  },
-  {
-    id: generateId(),
-    name: "Person 2",
-    timezone: "America/Los_Angeles",
-    freeTime: [
-      {
-        id: generateId(),
-        start: moment("21:00:00", "HH:mm:ss"),
-        end: moment("23:30:00", "HH:mm:ss"),
-      },
-    ],
-  },
+// const members: Member[] = [
+//   {
+//     id: generateId(),
+//     name: "Person 1",
+//     timezone: "Africa/Addis_Ababa",
+//     freeTime: [
+//       {
+//         id: generateId(),
+//         start: moment("10:30:00", "HH:mm:ss"),
+//         end: moment("12:00:00", "HH:mm:ss"),
+//       },
+//       {
+//         id: generateId(),
+//         start: moment("15:00:00", "HH:mm:ss"),
+//         end: moment("17:00:00", "HH:mm:ss"),
+//       },
+//     ],
+//   },
+//   {
+//     id: generateId(),
+//     name: "Person 2",
+//     timezone: "America/Los_Angeles",
+//     freeTime: [
+//       {
+//         id: generateId(),
+//         start: moment("21:00:00", "HH:mm:ss"),
+//         end: moment("23:30:00", "HH:mm:ss"),
+//       },
+//     ],
+//   },
 
-  // Add more members here with their respective free times and timezones
-];
+//   // Add more members here with their respective free times and timezones
+// ];
 
 const convertToUTC = (members: Member[]) => {
   return members.map((a) => {

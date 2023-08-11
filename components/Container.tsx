@@ -3,12 +3,9 @@ import "./style.css";
 import { Accordion, Select, ThemeIcon } from "@mantine/core";
 import React, { useState } from "react";
 import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
-import { renderTimeViewClock } from "@mui/x-date-pickers/timeViewRenderers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { format, parseISO } from "date-fns";
-
+ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+ import m from "moment-timezone";
 import ContentEditable from "react-contenteditable";
-import { timeZones } from "@/data/timezones";
 import moment from "moment";
 
 import { IconPlus, IconTrash } from "@tabler/icons-react";
@@ -29,12 +26,13 @@ import {
   updateMemberFreeTimeEnd,
   updateMemberFreeTimeStart,
 } from "@/redux/features/memberSlice";
-import { eventNames } from "process";
-import dayjs from "dayjs";
+ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
 function Container(props: { memberData: Member }) {
+  const timeZones = m.tz.names();
+
   const currentMembersState = useSelector((state: RootState) =>
     currentMembers(state)
   );
@@ -104,7 +102,7 @@ function Container(props: { memberData: Member }) {
   }
 
   const getTimeValue = (time: moment.Moment) => {
-     return "".concat(time.hour().toString(), ":", time.minute().toString());
+    return "".concat(time.hour().toString(), ":", time.minute().toString());
   };
 
   const handleChangeTime = (
@@ -114,9 +112,9 @@ function Container(props: { memberData: Member }) {
   ) => {
     // let today = moment().format("D/MM/YYYY").concat(" ", newValue);
 
-     // const time = moment(newValue, "hh:mm:ss");
+    // const time = moment(newValue, "hh:mm:ss");
 
-     if (isStartTime) {
+    if (isStartTime) {
       dispatch(
         updateMemberFreeTimeStart({
           memberId: props.memberData.id,
@@ -139,7 +137,6 @@ function Container(props: { memberData: Member }) {
     // e.stopPropagation();
     dispatch(deleteMember({ id: props.memberData.id }));
   };
- 
 
   //TIMEZONE
 
@@ -148,7 +145,7 @@ function Container(props: { memberData: Member }) {
   }
 
   return (
-    <div className="px-10">
+    <div className="px-10 max-sm:px-4">
       <Accordion
         chevronPosition="right"
         chevronSize={50}
@@ -178,7 +175,7 @@ function Container(props: { memberData: Member }) {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                 onChange={handleChange}
+                onChange={handleChange}
               />
             </div>
           </Accordion.Control>
@@ -234,22 +231,19 @@ function Container(props: { memberData: Member }) {
                         label="End"
                       />
                     </LocalizationProvider>
-                    {index === freeTime.length - 1 ? (
-                      <div
-                        onClick={() => {
-                          addNewTimeRow();
-                        }}
-                        className="absolute top-2 right-3 cursor-pointer"
-                      >
-                        <ThemeIcon size={32}>
-                          <IconPlus size="1.05rem" stroke={1.5} />
-                        </ThemeIcon>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
+                    {/* {index === freeTime.length - 1 ? ( */}
+
+                    {/* )} */}
                   </div>
                 ))}
+                <div
+                  onClick={() => {
+                    addNewTimeRow();
+                  }}
+                  className="bg-blue-500  inline cursor-pointer rounded px-4 py-2 w-16"
+                >
+                  <p className="text-white"> Add</p>
+                </div>
               </div>
             </div>
           </Accordion.Panel>

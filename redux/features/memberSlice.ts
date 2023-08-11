@@ -4,8 +4,7 @@ import { generateId } from "@/utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
 
-// Define the type for free time object
-
+  
 // Initial state for the members slice
 const initialState: Member[] = [
   {
