@@ -2,35 +2,36 @@
 import { motion } from "framer-motion";
 import Container from "@/components/Container";
 import Empty from "@/components/Empty";
-import {  useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currentMembers } from "@/redux/features/memberSlice";
-import {  Member } from "@/data";
+import { Member } from "@/data";
 
 import { useEffect, useState } from "react";
+import { IconPlus, IconTrash, IconUserQuestion } from "@tabler/icons-react";
 
 import { Result, findCommonIntervalAmongMembers } from "@/utils/logic";
 import DisplayContainer from "@/components/DisplayContainer";
+import { Button } from "@mantine/core";
 
 export default function Home() {
   const [freeTimeSlots, setFreeTimeSlots] = useState<Result[]>([]);
- 
+
   const [empty, setEmpty] = useState(false);
 
- 
   const [show, setShow] = useState(false);
   const members: Member[] = useSelector(currentMembers);
-
 
   const calculate_date = () => {
     setEmpty(false);
     setShow(true);
   };
-  
-  useEffect(() => { //BUG: when the time is changed after clicking calculate, it keeps adding new display cards
+
+  useEffect(() => {
+    //BUG: when the time is changed after clicking calculate, it keeps adding new display cards
     setFreeTimeSlots([]);
-    
+
     const r = findCommonIntervalAmongMembers(members);
-  
+
     if (r) {
       if (r.length === 0) {
         setEmpty(true);
@@ -110,6 +111,16 @@ export default function Home() {
           Unsplash
         </a>
       </p>
+      <div className="tooltip absolute bottom-2 right-2 bg-white rounded-full p-3">
+        <a
+          target="blank"
+          href="https://github.com/duckduckcodes/timezone/issues"
+        >
+          {" "}
+          <IconUserQuestion color="black" size={"32px"}/>
+          <span className="feedback">send feedback</span>
+        </a>
+      </div>
     </motion.main>
   );
 }
